@@ -1,0 +1,11 @@
+# Salesforce
+.sfdx/
+.sf/
+*.log
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
