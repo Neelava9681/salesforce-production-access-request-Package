@@ -2,11 +2,17 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "Production-Access",
+      "versionName": "1.0.0",
+      "versionNumber": "1.0.0.NEXT"
     }
   ],
-  "name": "Licious_Prod",
+  "name": "production-access",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "55.0"
+  "sourceApiVersion": "67.0",
+  "packageAliases": {
+    "Production-Access": "0HogL0000004b2bSAA"
+  }
 }
