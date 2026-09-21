@@ -15,5 +15,4 @@
     <navType>Standard</navType>
     <tabs>Access_Request__c</tabs>
     <uiType>Lightning</uiType>
-    <utilityBar>Developers_App_UtilityBar</utilityBar>
 </CustomApplication>

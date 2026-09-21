@@ -132,7 +132,7 @@
         <inputParameters>
             <name>emailSubject</name>
             <value>
-                <stringValue>Production Access – Activation Code Required</stringValue>
+                <elementReference>EmailSubject</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -411,10 +411,10 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Email</field>
+            <field>Username</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>Get_Production_Access_Config.Account_Email__c</elementReference>
+                <elementReference>Get_Production_Access_Config.Account_Username__c</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
