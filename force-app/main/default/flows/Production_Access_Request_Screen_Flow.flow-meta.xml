@@ -74,14 +74,11 @@
         <inputParameters>
             <name>senderType</name>
             <value>
-                <stringValue>OrgWideEmailAddress</stringValue>
+                <stringValue>CurrentUser</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
-            <value>
-                <stringValue>neelava@warpdrivetech.in</stringValue>
-            </value>
         </inputParameters>
         <inputParameters>
             <name>emailSubject</name>
@@ -120,14 +117,11 @@
         <inputParameters>
             <name>senderType</name>
             <value>
-                <stringValue>OrgWideEmailAddress</stringValue>
+                <stringValue>CurrentUser</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
             <name>senderAddress</name>
-            <value>
-                <stringValue>neelava@warpdrivetech.in</stringValue>
-            </value>
         </inputParameters>
         <inputParameters>
             <name>composeEmailContent</name>
@@ -144,7 +138,7 @@
         <inputParameters>
             <name>emailBody</name>
             <value>
-                <stringValue>&lt;p&gt;Hello {!DefaultDeveloperName},&lt;/p&gt;&lt;p&gt;Your request for temporary Production Access has been approved.&lt;/p&gt;&lt;p&gt;The Activation Code has been sent to the respective Authorizer for verification.&lt;/p&gt;&lt;p&gt;Please contact the Authorizer and obtain the Activation Code. Once you receive the code, enter it on the Production Access screen to activate your temporary permission set and start working on your task.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Access Details:&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Access Type:&lt;/strong&gt; {!Access_Type}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Requested Start Time:&lt;/strong&gt; {!Requested_Start}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Requested End Time:&lt;/strong&gt; {!RequestedEndFormula}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Duration:&lt;/strong&gt; {!Duration}&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Ticket Number:&lt;/strong&gt; {!Ticket_Number}&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Please make sure to enter the correct Activation Code provided by the Authorizer.&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Production Access Team&lt;/p&gt;</stringValue>
+                <elementReference>AcknowledgeEmailBody</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -536,7 +530,7 @@
         </fields>
         <fields>
             <name>info</name>
-            <fieldText>&lt;p&gt;Activation Code has been sent to your email address (&lt;b&gt;{!Developer_Email}&lt;/b&gt;).&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); font-size: small; font-family: Arial, Helvetica, sans-serif; color: rgb(34, 34, 34);&quot;&gt;Activation Code has been sent to the respective Authorizers&lt;/strong&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: small; font-family: Arial, Helvetica, sans-serif; color: rgb(34, 34, 34);&quot;&gt; for verification.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
@@ -694,6 +688,76 @@
     </start>
     <status>Active</status>
     <textTemplates>
+        <name>AcknowledgeEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hello {!DefaultDeveloperName},&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Your request for temporary Production Access has been successfully submitted.&lt;/p&gt;
+
+&lt;p&gt;The request has been sent for authorization, and the &lt;strong&gt;Activation Code has been sent to the respective Authorizer&lt;/strong&gt; for verification.&lt;/p&gt;
+
+&lt;p&gt;Please contact the Authorizer to obtain the Activation Code. Once you receive the code, enter it on the Production Access screen to activate your temporary permission set and start working on your task.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Access Details:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table class=&quot;ql-table-blob&quot; border=&quot;1&quot; style=&quot;border-collapse: collapse; font-family: sans-serif; font-size: 14px; width: 100%; max-width: 500px;&quot;&gt;
+&lt;tbody&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold; width: 40%;&quot;&gt;Project Name&lt;/td&gt;
+&lt;td&gt;{!Get_Production_Access_Config.Project_Name__c}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Ticket Number&lt;/td&gt;
+&lt;td&gt;{!Ticket_Number}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Reason&lt;/td&gt;
+&lt;td&gt;{!Reason}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Access Type&lt;/td&gt;
+&lt;td&gt;{!Access_Type}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested Start Time&lt;/td&gt;
+&lt;td&gt;{!Requested_Start}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested End Time&lt;/td&gt;
+&lt;td&gt;{!RequestedEndFormula}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Duration&lt;/td&gt;
+&lt;td&gt;{!Duration} Hour(s)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Next Step:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Please contact the respective Authorizer and obtain the Activation Code. Make sure to enter the correct Activation Code on the Production Access screen to complete the verification and activate your temporary access.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Regards,&lt;/p&gt;
+
+&lt;p&gt;Production Access Team&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
         <name>EmailSubject</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>Production Access Permission Activation Code For {!Get_Production_Access_Config.Project_Name__c}</text>
@@ -701,7 +765,78 @@
     <textTemplates>
         <name>OTPEmailBodyTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Hello,&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;One request for &lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!Get_Production_Access_Config.Project_Name__c} &lt;/span&gt;Production Access has been submitted. Below are the activation code and request details:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;table class=&quot;ql-table-blob&quot; border=&quot;1&quot; style=&quot;border-collapse: collapse; font-family: sans-serif; font-size: 14px; width: 100%; max-width: 500px;&quot;&gt;&lt;tbody&gt;&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;&lt;td style=&quot;font-weight: bold; width: 40%;&quot;&gt;Developer Name&lt;/td&gt;&lt;td&gt;{!Developer_Name}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-weight: bold;&quot;&gt;Access Type&lt;/td&gt;&lt;td&gt;{!Access_Type}&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested Start Time&lt;/td&gt;&lt;td&gt;{!Requested_Start}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested End Time (Expiration)&lt;/td&gt;&lt;td&gt;{!RequestedEndFormula}&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;&lt;td style=&quot;font-weight: bold;&quot;&gt;Duration&lt;/td&gt;&lt;td&gt;{!Duration} Hour(s)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Activation Code:&lt;/strong&gt; &lt;strong style=&quot;color: rgb(0, 112, 210); font-size: 24px;&quot;&gt;{!otpvariable2}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please share this activation code with respective developer.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Production Access Team&lt;/p&gt;</text>
+        <text>&lt;p&gt;Hello,&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;One request for &lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!Get_Production_Access_Config.Project_Name__c}&lt;/span&gt; Production Access has been submitted. Below are the activation code and request details:&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;table class=&quot;ql-table-blob&quot; border=&quot;1&quot; style=&quot;border-collapse: collapse; font-family: sans-serif; font-size: 14px; width: 100%; max-width: 500px;&quot;&gt;
+&lt;tbody&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold; width: 40%;&quot;&gt;Project Name&lt;/td&gt;
+&lt;td&gt;{!Get_Production_Access_Config.Project_Name__c}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Developer Name&lt;/td&gt;
+&lt;td&gt;{!Developer_Name}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Developer Email&lt;/td&gt;
+&lt;td&gt;{!Developer_Email}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Ticket Number&lt;/td&gt;
+&lt;td&gt;{!Ticket_Number}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Reason&lt;/td&gt;
+&lt;td&gt;{!Reason}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Access Type&lt;/td&gt;
+&lt;td&gt;{!Access_Type}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested Start Time&lt;/td&gt;
+&lt;td&gt;{!Requested_Start}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Requested End Time (Expiration)&lt;/td&gt;
+&lt;td&gt;{!RequestedEndFormula}&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr style=&quot;background-color: #f3f3f3;&quot;&gt;
+&lt;td style=&quot;font-weight: bold;&quot;&gt;Duration&lt;/td&gt;
+&lt;td&gt;{!Duration} Hour(s)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Activation Code:&lt;/strong&gt; &lt;strong style=&quot;font-size: 24px; color: rgb(0, 112, 210);&quot;&gt;{!otpvariable2}&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Please share this activation code with respective developer.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;Regards,&lt;/p&gt;
+
+&lt;p&gt;Production Access Team&lt;/p&gt;</text>
     </textTemplates>
     <variables>
         <name>CreatedAccessRequestId</name>

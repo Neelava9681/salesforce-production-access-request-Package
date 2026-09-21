@@ -3,7 +3,6 @@
     <fullName>Authorizers_Email_IDs__c</fullName>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Authorizers Email IDs</label>
-    <length>32768</length>
-    <type>LongTextArea</type>
-    <visibleLines>3</visibleLines>
+    <length>255</length>
+    <type>Text</type>
 </CustomField>

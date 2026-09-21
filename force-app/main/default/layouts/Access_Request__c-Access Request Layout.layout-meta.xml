@@ -98,10 +98,6 @@
     </platformActionList>
     <quickActionList/>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Access_Verification__c.Access_Request__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>TASK.SUBJECT</fields>
         <fields>TASK.WHO_NAME</fields>
         <fields>ACTIVITY.TASK</fields>
@@ -132,3 +128,4 @@
         <summaryLayoutStyle>Default</summaryLayoutStyle>
     </summaryLayout>
 </Layout>
+
