@@ -13,6 +13,14 @@
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "67.0",
   "packageAliases": {
-    "Production-Access": "0HogL0000004b2bSAA"
+    "Production-Access": "0HogL0000004b2bSAA",
+    "Production-Access@1.0.0-2": "04tgL000000UtLdQAK",
+    "Production-Access@1.0.0-3": "04tgL000000UuHhQAK",
+    "Production-Access@1.0.0-4": "04tgL000000UuO9QAK",
+    "Production-Access@1.0.0-5": "04tgL000000VI77QAG",
+    "Production-Access@1.0.0-6": "04tgL000000W1XFQA0",
+    "Production-Access@1.0.0-7": "04tgL000000WfsrQAC",
+    "Production-Access@1.0.0-8": "04tgL000000WljlQAC",
+    "Production-Access@1.0.0-9": "04tgL000000WmfpQAC"
   }
 }

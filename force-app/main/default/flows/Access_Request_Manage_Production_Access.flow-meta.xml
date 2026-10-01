@@ -1,0 +1,2002 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Copy_1_of_Send_End_Email_To_Authorizers</name>
+        <label>Send End Email To Authorizers</label>
+        <locationX>1898</locationX>
+        <locationY>708</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Delete_PermissionSetAssignment_Record</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Authorizers_Email.Authorizers_Email_IDs__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>EndAccessEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EndAccessEmailBodyForAuthorizerwithWithoutPass</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Delete_PermissionSetAssignment_Record</name>
+        <label>Delete PermissionSetAssignment Record</label>
+        <locationX>1766</locationX>
+        <locationY>1008</locationY>
+        <actionName>ProductionAccessPermissionSet</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Send_Email_To_Developer</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>permissionSetAssignmentId</name>
+            <value>
+                <elementReference>$Record.Permission_Set_Assignment_Id__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>ProductionAccessPermissionSet</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Password_Reset_and_Permission_Set_Assignment</name>
+        <label>Password Reset and Permission Set Assignment</label>
+        <locationX>842</locationX>
+        <locationY>600</locationY>
+        <actionName>ProductionAccessResetPassword</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Record_Activation</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>accessType</name>
+            <value>
+                <elementReference>$Record.Access_Type__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onlyPasswordReset</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onlyPermissionSetAssignment</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestedEnd</name>
+            <value>
+                <elementReference>$Record.Requested_End__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>ProductionAccessResetPassword</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ProductionUsersPassword</assignToReference>
+            <name>newPassword</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ProductionUser</assignToReference>
+            <name>username</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Permission_Set_Assignment</name>
+        <label>Permission Set Assignment</label>
+        <locationX>1106</locationX>
+        <locationY>600</locationY>
+        <actionName>ProductionAccessResetPassword</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Record_Activation</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>accessType</name>
+            <value>
+                <elementReference>$Record.Access_Type__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onlyPasswordReset</name>
+            <value>
+                <booleanValue>false</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onlyPermissionSetAssignment</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestedEnd</name>
+            <value>
+                <elementReference>$Record.Requested_End__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>ProductionAccessResetPassword</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ProductionUsersPassword</assignToReference>
+            <name>newPassword</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ProductionUser</assignToReference>
+            <name>username</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Reset_Password_For_End</name>
+        <label>Reset Password For End</label>
+        <locationX>1634</locationX>
+        <locationY>708</locationY>
+        <actionName>ProductionAccessResetPassword</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Send_End_Email_To_Authorizers</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>accessType</name>
+        </inputParameters>
+        <inputParameters>
+            <name>onlyPasswordReset</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requestedEnd</name>
+        </inputParameters>
+        <nameSegment>ProductionAccessResetPassword</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ProductionUsersPassword</assignToReference>
+            <name>newPassword</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>ProductionUser</assignToReference>
+            <name>username</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Approval_Email_To_Owner</name>
+        <label>Send Approval Email To Owner</label>
+        <locationX>50</locationX>
+        <locationY>492</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Developer_Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>ApprovalEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>ApprovalEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_To_Developer</name>
+        <label>Send Email To Developer</label>
+        <locationX>1766</locationX>
+        <locationY>1116</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Expired_Record</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Developer_Email__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>EndAccessEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EndAccessEmailBodyForDeveloperwithWithoutPass</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_End_Email_To_Authorizers</name>
+        <label>Send End Email To Authorizers</label>
+        <locationX>1634</locationX>
+        <locationY>816</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Delete_PermissionSetAssignment_Record</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Authorizers_Email.Authorizers_Email_IDs__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>EndAccessEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>EndAccessEmailBodyForAuthorizerwithPass</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Rejection_Email_To_Owner</name>
+        <label>Send Rejection Email To Owner</label>
+        <locationX>314</locationX>
+        <locationY>492</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Developer_Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>RejectionEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>RejectionEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Start_Email_With_Password</name>
+        <label>Send Start Email With Password</label>
+        <locationX>974</locationX>
+        <locationY>1008</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Developer_Email__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccRecipientAddressList</name>
+            <value>
+                <elementReference>Copy_1_of_Get_Authorizers_Email.Authorizers_Email_IDs__c</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>StartAccessEmailSubject</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>StartAccessEmailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useLineBreaks</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Check_If_Approved_At_End</name>
+        <label>Check If Approved At End</label>
+        <locationX>1964</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Approved_For_End</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Active</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Authorizers_Email</targetReference>
+            </connector>
+            <label>Approved For End</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_If_Approved_At_Start</name>
+        <label>Check If Approved At Start</label>
+        <locationX>1172</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Approved_For_Start</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Other_Ongoing_Proccess</targetReference>
+            </connector>
+            <label>Approved For Start</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Status</name>
+        <label>Check Status</label>
+        <locationX>314</locationX>
+        <locationY>384</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Approved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Approval_Email_To_Owner</targetReference>
+            </connector>
+            <label>Is Approved</label>
+        </rules>
+        <rules>
+            <name>Is_Rejected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Rejected</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Rejection_Email_To_Owner</targetReference>
+            </connector>
+            <label>Is Rejected</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_With_Other_Active_Request</name>
+        <label>Check With Other Active Request</label>
+        <locationX>974</locationX>
+        <locationY>492</locationY>
+        <defaultConnector>
+            <targetReference>Permission_Set_Assignment</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Other_Ongoing_Proccess</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Password_Reset_and_Permission_Set_Assignment</targetReference>
+            </connector>
+            <label>Is Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Copy_1_of_Check_With_Other_Active_Request</name>
+        <label>Check With Other Active Request</label>
+        <locationX>1766</locationX>
+        <locationY>600</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Send_End_Email_To_Authorizers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Is_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Copy_1_of_Get_Other_Ongoing_Proccess</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reset_Password_For_End</targetReference>
+            </connector>
+            <label>Copy 1 of Is Null</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Access Request - Manage Production Access {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Access Request - Manage Production Access</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Copy_1_of_Get_Authorizers_Email</name>
+        <label>Get Authorizers Emails</label>
+        <locationX>974</locationX>
+        <locationY>900</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Start_Email_With_Password</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Production_Access_Config__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Copy_1_of_Get_Other_Ongoing_Proccess</name>
+        <label>Other Ongoing Proccess</label>
+        <locationX>1766</locationX>
+        <locationY>492</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Copy_1_of_Check_With_Other_Active_Request</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Production_Access_Request__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Authorizers_Email</name>
+        <label>Get Authorizers Email</label>
+        <locationX>1766</locationX>
+        <locationY>384</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Copy_1_of_Get_Other_Ongoing_Proccess</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Production_Access_Config__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Other_Ongoing_Proccess</name>
+        <label>Get Other Ongoing Proccess</label>
+        <locationX>974</locationX>
+        <locationY>384</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_With_Other_Active_Request</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Production_Access_Request__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Project_Details</name>
+        <label>Project Details</label>
+        <locationX>314</locationX>
+        <locationY>276</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_Status</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Production_Access_Config__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Expired_Record</name>
+        <label>Expired Record</label>
+        <locationX>1766</locationX>
+        <locationY>1224</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Expired</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Record_Activation</name>
+        <label>Record Activation</label>
+        <locationX>974</locationX>
+        <locationY>792</locationY>
+        <connector>
+            <targetReference>Copy_1_of_Get_Authorizers_Email</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Permission_Set_Assignment_Id__c</field>
+            <value>
+                <elementReference>PermissionSetAssignmentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>1013</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Project_Details</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Rejected</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Active</stringValue>
+            </value>
+        </filters>
+        <object>Production_Access_Request__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Access_Start</name>
+            <connector>
+                <targetReference>Check_If_Approved_At_Start</targetReference>
+            </connector>
+            <label>Access Start</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <recordField>Requested_Start__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>Access_End</name>
+            <connector>
+                <targetReference>Check_If_Approved_At_End</targetReference>
+            </connector>
+            <label>Access End</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Hours</offsetUnit>
+            <recordField>Requested_End__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>ApprovalEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Approved&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+           style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Approved
+                            &lt;/h1&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Body --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello {!$Record.Developer_Name__c},
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Your production access request for {!Project_Details.Project_Name__c} has been
+                                &lt;strong&gt;approved&lt;/strong&gt;.
+                            &lt;/p&gt;
+
+                            &lt;!-- Request Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Ticket Number
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            #{!$Record.Ticket_Number__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Start Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_Start__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            End Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Access Information --&gt;
+                            &lt;div style=&quot;background-color:#eef4ff; border-left:4px solid #1b96ff; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    At the scheduled start time, you will receive an email
+                                    containing the production account password. You can use
+                                    the provided password to log in to the production
+                                    environment and complete your assigned task during the
+                                    approved access period.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:22px 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>ApprovalEmailSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Production Access Request Approved - Ticket #{!$Record.Ticket_Number__c} for {!Project_Details.Project_Name__c}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EndAccessEmailBodyForAuthorizerwithPass</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Ended&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Ended
+                            &lt;/h1&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Content --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                This is to inform you that the production access period for
+                                &lt;strong&gt;Ticket #{!$Record.Ticket_Number__c}&lt;/strong&gt;
+                                for project
+                                &lt;strong&gt;{!Get_Authorizers_Email.Project_Name__c}&lt;/strong&gt;
+                                has &lt;strong style=&quot;color:#c23934;&quot;&gt;ENDED&lt;/strong&gt;.
+                            &lt;/p&gt;
+
+                            &lt;!-- Access Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;Production Account&lt;/strong&gt;&lt;br&gt;
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!ProductionUser}
+                                        &lt;/span&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;Access End Time&lt;/strong&gt;&lt;br&gt;
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;Password Reset Status&lt;/strong&gt;&lt;br&gt;
+                                        &lt;span style=&quot;font-size:14px; color:#2e844a;&quot;&gt;
+                                            Successfully Reset
+                                        &lt;/span&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Password --&gt;
+                            &lt;div style=&quot;background-color:#eef4ff; border-left:4px solid #1b96ff; padding:16px; margin-bottom:22px;&quot;&gt;
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold;&quot;&gt;
+                                    New Production Account Password
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-family:Courier New, Courier, monospace; font-size:16px; font-weight:bold; color:#16325c; word-break:break-all;&quot;&gt;
+                                    {!ProductionUsersPassword}
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+
+                            &lt;!-- Security Note --&gt;
+                            &lt;div style=&quot;background-color:#fff7e6; border:1px solid #f5c26b; padding:14px 16px; border-radius:6px; margin-bottom:22px;&quot;&gt;
+                                &lt;p style=&quot;margin:0; font-size:13px; line-height:1.6; color:#6b4f00;&quot;&gt;
+                                    &lt;strong&gt;Security Note:&lt;/strong&gt;
+                                    The password has been reset successfully and has
+                                    &lt;strong&gt;NOT been shared with the record owner&lt;/strong&gt;.
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EndAccessEmailBodyForAuthorizerwithWithoutPass</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Ticket Completed&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Ticket Completed
+                            &lt;/h1&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Body --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                This is to inform you that the production access period for
+                                &lt;strong&gt;Ticket #{!$Record.Ticket_Number__c}&lt;/strong&gt;
+                                for project
+                                &lt;strong&gt;{!Get_Authorizers_Email.Project_Name__c}&lt;/strong&gt;
+                                has been completed.
+                            &lt;/p&gt;
+
+                            &lt;!-- Access Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Production Account
+                                        &lt;/strong&gt;
+                                        &lt;br&gt;
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!ProductionUser}
+                                        &lt;/span&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Access End Time
+                                        &lt;/strong&gt;
+                                        &lt;br&gt;
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Password Status --&gt;
+                            &lt;div style=&quot;background-color:#fff7e6; border-left:4px solid #f5a623; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#6b4f00;&quot;&gt;
+                                    Password Reset Status
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    The production account password has
+                                    &lt;strong&gt;not been reset at this time&lt;/strong&gt;,
+                                    as another production access ticket is currently under process
+                                    for the same account.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;!-- Next Action --&gt;
+                            &lt;div style=&quot;background-color:#eef4ff; border-left:4px solid #1b96ff; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                    Next Action
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    Once the other active production access ticket is completed,
+                                    the production account password will be reset and the new password
+                                    will be securely shared with you.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                No action is required from your side at this time.
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:22px 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EndAccessEmailBodyForDeveloper</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Expired&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+           style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Expired
+                            &lt;/h1&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Body --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello {!$Record.Developer_Name__c},
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                This is to inform you that the approved production access
+                                for &lt;strong&gt;Ticket #{!$Record.Ticket_Number__c}&lt;/strong&gt;
+                                has reached its scheduled end time.
+                            &lt;/p&gt;
+
+                            &lt;!-- Access Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Project
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!Get_Authorizers_Email.Project_Name__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Production Account
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!ProductionUser}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Access End Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Access Removed --&gt;
+                            &lt;div style=&quot;background-color:#eef8f1; border-left:4px solid #2e844a; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#245c35;&quot;&gt;
+                                    Production Access Removed
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    The temporary production access permission set assigned
+                                    for this ticket has been &lt;strong&gt;removed&lt;/strong&gt; because
+                                    the approved access period has ended.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;!-- Current Status --&gt;
+                            &lt;div style=&quot;background-color:#f4f6f8; border-left:4px solid #16325c; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                    Access Status
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    Your temporary production access for this ticket is now
+                                    &lt;strong&gt;expired&lt;/strong&gt;. You no longer have the permissions
+                                    granted through this access request.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                If you require production access again, please submit a new
+                                production access request through the standard process.
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:22px 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EndAccessEmailBodyForDeveloperwithWithoutPass</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+
+&lt;head&gt;
+
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+
+  &lt;title&gt;Production Access Ended&lt;/title&gt;
+
+&lt;/head&gt;
+
+
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+
+
+  &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+
+    &lt;tr&gt;
+
+      &lt;td align=&quot;center&quot;&gt;
+
+
+
+        &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+
+            style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+
+
+          &lt;!-- Header --&gt;
+
+          &lt;tr&gt;
+
+            &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+
+              &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+
+                Production Access Ended
+
+              &lt;/h1&gt;
+
+            &lt;/td&gt;
+
+          &lt;/tr&gt;
+
+
+
+          &lt;!-- Content --&gt;
+
+          &lt;tr&gt;
+
+            &lt;td style=&quot;padding:30px;&quot;&gt;
+
+
+
+              &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+
+                Hello {!$Record.Developer_Name__c},
+
+              &lt;/p&gt;
+
+
+
+              &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+
+                This is to inform you that the production access period for
+
+                &lt;strong&gt;Ticket #{!$Record.Ticket_Number__c}&lt;/strong&gt;
+
+                for project
+
+                &lt;strong&gt;{!Get_Authorizers_Email.Project_Name__c}&lt;/strong&gt;
+
+                has &lt;strong style=&quot;color:#c23934;&quot;&gt;ENDED&lt;/strong&gt;.
+
+              &lt;/p&gt;
+
+
+
+              &lt;!-- Access Details --&gt;
+
+              &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+
+                  style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+
+
+                &lt;tr&gt;
+
+                  &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                    &lt;strong style=&quot;font-size:14px;&quot;&gt;Production Account&lt;/strong&gt;&lt;br&gt;
+
+                    &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+
+                      {!ProductionUser}
+
+                    &lt;/span&gt;
+
+                  &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+
+
+                &lt;tr&gt;
+
+                  &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+
+                    &lt;strong style=&quot;font-size:14px;&quot;&gt;Access End Time&lt;/strong&gt;&lt;br&gt;
+
+                    &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+
+                      {!$Record.Requested_End__c}
+
+                    &lt;/span&gt;
+
+                  &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+
+
+              &lt;/table&gt;
+
+
+
+              &lt;!-- Access Expired Notice --&gt;
+
+              &lt;div style=&quot;background-color:#fff7e6; border:1px solid #f5c26b; padding:16px; border-radius:6px; margin-bottom:22px;&quot;&gt;
+
+                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#6b4f00;&quot;&gt;
+
+                  &lt;strong&gt;Access Period Completed:&lt;/strong&gt;
+
+                  Your temporary production access has expired because the
+
+                  approved access period has ended.
+
+                &lt;/p&gt;
+
+              &lt;/div&gt;
+
+
+
+              &lt;!-- New Request --&gt;
+
+              &lt;div style=&quot;background-color:#eef4ff; border-left:4px solid #1b96ff; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+
+                  Need Additional Production Access?
+
+                &lt;/p&gt;
+
+
+
+                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#444444;&quot;&gt;
+
+                  If you require production access again, please submit a
+
+                  &lt;strong&gt;new Production Access Request&lt;/strong&gt; with the
+
+                  required access details for approval.
+
+                &lt;/p&gt;
+
+              &lt;/div&gt;
+
+
+
+              &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+
+                Regards,
+
+              &lt;/p&gt;
+
+
+
+              &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+
+                Production Access Security Team
+
+              &lt;/p&gt;
+
+
+
+            &lt;/td&gt;
+
+          &lt;/tr&gt;
+
+
+
+          &lt;!-- Footer --&gt;
+
+          &lt;tr&gt;
+
+            &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+              &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+
+                This is an automated notification from the Production Access Security System.
+
+                Please do not reply to this email.
+
+              &lt;/p&gt;
+
+            &lt;/td&gt;
+
+          &lt;/tr&gt;
+
+
+
+        &lt;/table&gt;
+
+
+
+      &lt;/td&gt;
+
+    &lt;/tr&gt;
+
+  &lt;/table&gt;
+
+
+
+&lt;/body&gt;
+
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>EndAccessEmailSubject</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>Production Access Expired - Ticket No. #{!$Record.Ticket_Number__c} - {!Get_Authorizers_Email.Project_Name__c}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>RejectionEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Request Rejected&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+           style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Request Rejected
+                            &lt;/h1&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Body --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello {!$Record.Developer_Name__c},
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Your production access request for {!Project_Details.Project_Name__c} has been
+                                &lt;strong&gt;rejected&lt;/strong&gt;.
+                            &lt;/p&gt;
+
+                            &lt;!-- Request Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Ticket Number
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            #{!$Record.Ticket_Number__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Requested Start Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_Start__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Requested End Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Rejection Information --&gt;
+                            &lt;div style=&quot;background-color:#fff1f0; border-left:4px solid #ba0517; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    Please resubmit the request with the appropriate access
+                                    details or consult with the authorizer to understand the
+                                    reason for the rejection.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:22px 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>RejectionEmailSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Production Access Request Rejected - Ticket #{!$Record.Ticket_Number__c} for {!Project_Details.Project_Name__c}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>StartAccessEmailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Production Access Active&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif; color:#333333;&quot;&gt;
+
+    &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+           style=&quot;background-color:#f4f6f8; padding:30px 0;&quot;&gt;
+
+        &lt;tr&gt;
+            &lt;td align=&quot;center&quot;&gt;
+
+                &lt;table width=&quot;600&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                       style=&quot;width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e1e5e8; border-radius:8px;&quot;&gt;
+
+                    &lt;!-- Header --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;background-color:#16325c; padding:24px 30px; border-radius:8px 8px 0 0;&quot;&gt;
+
+                            &lt;h1 style=&quot;margin:0; color:#ffffff; font-size:22px; font-weight:600;&quot;&gt;
+                                Production Access Active
+                            &lt;/h1&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Body --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:30px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Hello {!$Record.Developer_Name__c},
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 20px 0; font-size:15px; line-height:1.6;&quot;&gt;
+                                Your production access request for
+                                &lt;strong&gt;Ticket #{!$Record.Ticket_Number__c} for {!Copy_1_of_Get_Authorizers_Email.Project_Name__c}&lt;/strong&gt;
+                                is now &lt;strong&gt;ACTIVE&lt;/strong&gt;.
+                            &lt;/p&gt;
+
+                            &lt;!-- Access Details --&gt;
+                            &lt;table width=&quot;100%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot;
+                                   style=&quot;background-color:#f8f9fa; border:1px solid #e1e5e8; border-radius:6px; margin:0 0 22px 0;&quot;&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Production Account
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!ProductionUser}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px; border-bottom:1px solid #e1e5e8;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            Start Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_Start__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                                &lt;tr&gt;
+                                    &lt;td style=&quot;padding:14px 16px;&quot;&gt;
+
+                                        &lt;strong style=&quot;font-size:14px;&quot;&gt;
+                                            End Time
+                                        &lt;/strong&gt;
+
+                                        &lt;br&gt;
+
+                                        &lt;span style=&quot;font-size:14px; color:#555555;&quot;&gt;
+                                            {!$Record.Requested_End__c}
+                                        &lt;/span&gt;
+
+                                    &lt;/td&gt;
+                                &lt;/tr&gt;
+
+                            &lt;/table&gt;
+
+                            &lt;!-- Permission Set Assigned --&gt;
+                            &lt;div style=&quot;background-color:#eef8f1; border-left:4px solid #2e844a; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; font-weight:bold; color:#245c35;&quot;&gt;
+                                    Production Access Granted
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    The requested permission set has been successfully
+                                    assigned to the production account for the approved
+                                    access period.
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;!-- Login Credentials --&gt;
+                            &lt;div style=&quot;background-color:#eef4ff; border-left:4px solid #1b96ff; padding:16px; margin-bottom:22px;&quot;&gt;
+
+                                &lt;p style=&quot;margin:0 0 12px 0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                    Production Login Credentials
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0 0 8px 0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    &lt;strong&gt;Username:&lt;/strong&gt;
+                                    {!ProductionUser}
+                                &lt;/p&gt;
+
+                                &lt;p style=&quot;margin:0; font-size:14px; line-height:1.6; color:#555555;&quot;&gt;
+                                    &lt;strong&gt;Password:&lt;/strong&gt;
+                                    {!ProductionUsersPassword}
+                                &lt;/p&gt;
+
+                            &lt;/div&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Using the credentials above, you can log in to the production
+                                environment and complete your assigned task during the approved
+                                access period.
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0 0 18px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Please ensure that all production activities are completed
+                                before the specified &lt;strong&gt;End Time&lt;/strong&gt;.
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:22px 0 8px 0; font-size:14px; line-height:1.6;&quot;&gt;
+                                Regards,
+                            &lt;/p&gt;
+
+                            &lt;p style=&quot;margin:0; font-size:14px; font-weight:bold; color:#16325c;&quot;&gt;
+                                Production Access Security Team
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                    &lt;!-- Footer --&gt;
+                    &lt;tr&gt;
+                        &lt;td style=&quot;padding:18px 30px; background-color:#f8f9fa; border-top:1px solid #e1e5e8; border-radius:0 0 8px 8px;&quot;&gt;
+
+                            &lt;p style=&quot;margin:0; text-align:center; font-size:11px; color:#777777; line-height:1.5;&quot;&gt;
+                                This is an automated notification from the Production Access Security System.
+                                Please do not reply to this email.
+                            &lt;/p&gt;
+
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+            &lt;/td&gt;
+        &lt;/tr&gt;
+
+    &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>StartAccessEmailSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Production Access Active - Password Credentials for Ticket #{!$Record.Ticket_Number__c} For {!Copy_1_of_Get_Authorizers_Email.Project_Name__c}</text>
+    </textTemplates>
+    <variables>
+        <name>PermissionSetAssignmentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>ProductionUser</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>ProductionUsersPassword</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

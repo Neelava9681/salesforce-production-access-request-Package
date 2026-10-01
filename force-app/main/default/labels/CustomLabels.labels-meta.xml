@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Production_Access_Site_Base_URL</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Base URL of the SF Site used for Production Access approval and rejection</shortDescription>
+        <value>https://orgfarm-9bf7549ff8-dev-ed.develop.my.salesforce-sites.com/productionaccess</value>
+    </labels>
+</CustomLabels>
