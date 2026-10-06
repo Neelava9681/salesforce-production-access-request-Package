@@ -4,6 +4,21 @@ An automated, time-bound Salesforce production access management solution allowi
 
 ---
 
+## 📦 Package Installation
+
+Install the package into your Salesforce organization using the links below (Package Version `1.0.0-9`, Package ID `04tgL000000WmfpQAC`):
+
+- **Production / Developer Org Installation Link**:  
+  [Install Package in Production](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgL000000WmfpQAC)
+
+- **Sandbox Installation Link**:  
+  [Install Package in Sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgL000000WmfpQAC)
+
+> [!NOTE]  
+> **Package Version Note**: Always prefer and check for the latest package version ID from the [`sfdx-project.json`](file:///c:/Users/Hp/Desktop/sfdc%20Project/AdminSecurityCheck/sfdx-project.json) file under `packageAliases`.
+
+---
+
 ## 🛠️ After-Installation Configuration Guide
 
 Follow these post-installation setup steps to configure the application in your org:
