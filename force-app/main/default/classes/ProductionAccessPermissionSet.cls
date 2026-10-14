@@ -54,34 +54,40 @@ public without sharing class ProductionAccessPermissionSet {
                 WHERE AssigneeId = :request.userId
                 AND PermissionSetId = :resolvedPermSetId
                 LIMIT 1
+                ALL ROWS
             ];
 
+            // Declare wrapper here so idsToDelete can be set inside the existingPsa check below
+            PermissionSetAssignmentWrapper wrapper = new PermissionSetAssignmentWrapper();
+
             if (!existingPsa.isEmpty()) {
+                // Store the old PSA Id in the wrapper so the Queueable can delete
+                // it BEFORE inserting the new one (prevents race condition / DUPLICATE_VALUE)
+                wrapper.idsToDelete = new List<Id>{ existingPsa[0].Id };
                 res.isAlreadyAssigned = true;
-                res.isSuccess = true;
-                res.existingExpirationDate = existingPsa[0].ExpirationDate;
-                res.message = 'Permission set is already assigned.';
-                if (request.requestId != null) {updateRequestRecordFuture(request.requestId, existingPsa[0].Id);
-                }
             } else {
-                PermissionSetAssignment psa = new PermissionSetAssignment(
-                    AssigneeId = request.userId,
-                    PermissionSetId = resolvedPermSetId
-                );
-                if (request.expirationDate != null) {
-                    psa.ExpirationDate = request.expirationDate;
-                }
-
-                PermissionSetAssignmentWrapper wrapper = new PermissionSetAssignmentWrapper();
-                wrapper.assignment = psa;
-                wrapper.requestId = request.requestId;
-                assignmentsToInsert.add(wrapper);
-
                 res.isAlreadyAssigned = false;
-                res.isSuccess = true;
-                res.existingExpirationDate = request.expirationDate;
-                res.message = 'Permission set assigned successfully.';
             }
+
+            // Always insert a fresh PSA with the new expiration date
+            PermissionSetAssignment psa = new PermissionSetAssignment(
+                AssigneeId = request.userId,
+                PermissionSetId = resolvedPermSetId
+            );
+            if (request.expirationDate != null) {
+                psa.ExpirationDate = request.expirationDate;
+            }
+
+            wrapper.assignment = psa;
+            wrapper.requestId = request.requestId;
+            wrapper.accessType = request.permissionSetId;
+            assignmentsToInsert.add(wrapper);
+
+            res.isSuccess = true;
+            res.existingExpirationDate = request.expirationDate;
+            res.message = res.isAlreadyAssigned
+                ? 'Existing assignment deleted. New assignment will be created with updated timing.'
+                : 'Permission set assigned successfully.';
 
             results.add(res);
 
@@ -95,9 +101,20 @@ public without sharing class ProductionAccessPermissionSet {
                     psaList.add(w.assignment);
                 }
                 insert psaList;
+
+                // Update the related Production_Access_Request__c with the new PSA Id
+                List<Production_Access_Request__c> requestsToUpdate = new List<Production_Access_Request__c>();
                 for (PermissionSetAssignmentWrapper w : assignmentsToInsert) {
-                    if (w.requestId != null && w.assignment.Id != null) {updateRequestRecordFuture(w.requestId, w.assignment.Id);
+                    if (w.requestId != null && w.assignment.Id != null) {
+                        requestsToUpdate.add(new Production_Access_Request__c(
+                            Id = w.requestId,
+                            Permission_Set_Assignment_Id__c = w.assignment.Id,
+                            Status__c = 'Active'
+                        ));
                     }
+                }
+                if (!requestsToUpdate.isEmpty()) {
+                    update requestsToUpdate;
                 }
             } else {
                 System.enqueueJob(new AssignPermissionSetQueueable(assignmentsToInsert));
@@ -110,6 +127,8 @@ public without sharing class ProductionAccessPermissionSet {
     public class PermissionSetAssignmentWrapper {
         public PermissionSetAssignment assignment;
         public Id requestId;
+        public String accessType;
+        public List<Id> idsToDelete;
     }
 
     public class AssignPermissionSetQueueable implements Queueable {
@@ -126,83 +145,68 @@ public without sharing class ProductionAccessPermissionSet {
             }
 
             try {
-                Set<Id> assigneeIds = new Set<Id>();
-                Set<Id> permSetIds = new Set<Id>();
+                // Step 1: Delete old PSAs first (sequential in same transaction — no race condition)
+                Set<Id> psaIdsToDelete = new Set<Id>();
                 for (PermissionSetAssignmentWrapper w : wrappers) {
-                    if (w.assignment != null) {
-                        assigneeIds.add(w.assignment.AssigneeId);
-                        permSetIds.add(w.assignment.PermissionSetId);
+                    if (w.idsToDelete != null && !w.idsToDelete.isEmpty()) {psaIdsToDelete.addAll(w.idsToDelete);
                     }
                 }
-
-                Map<String, PermissionSetAssignment> existingMap = new Map<String, PermissionSetAssignment>();
-                if (!assigneeIds.isEmpty() && !permSetIds.isEmpty()) {
-                    for (PermissionSetAssignment psa : [
-                        SELECT Id, AssigneeId, PermissionSetId, ExpirationDate
+                if (!psaIdsToDelete.isEmpty()) {
+                    List<PermissionSetAssignment> toDelete = [
+                        SELECT Id
                         FROM PermissionSetAssignment
-                        WHERE AssigneeId IN :assigneeIds
-                          AND PermissionSetId IN :permSetIds
-                    ]) {
-                        existingMap.put(psa.AssigneeId + '_' + psa.PermissionSetId, psa);
+                        WHERE Id IN :psaIdsToDelete
+                        ALL ROWS
+                    ];
+                    if (!toDelete.isEmpty()) {
+                        delete toDelete;
+                        System.debug('Queueable: deleted old PSAs: ' + psaIdsToDelete);
                     }
                 }
 
+                // Step 2: Insert new PSAs (old ones are already gone)
                 List<PermissionSetAssignment> toInsert = new List<PermissionSetAssignment>();
-                List<PermissionSetAssignment> toUpdate = new List<PermissionSetAssignment>();
-
                 for (PermissionSetAssignmentWrapper w : wrappers) {
                     if (w.assignment != null) {
-                        String key = w.assignment.AssigneeId + '_' + w.assignment.PermissionSetId;
-                        if (existingMap.containsKey(key)) {
-                            PermissionSetAssignment existing = existingMap.get(key);
-                            existing.ExpirationDate = w.assignment.ExpirationDate;
-                            toUpdate.add(existing);
-                            w.assignment = existing;
-                        } else {
-                            toInsert.add(w.assignment);
-                        }
+                        toInsert.add(w.assignment);
                     }
                 }
 
-                if (!toUpdate.isEmpty()) {
-                    update toUpdate;
-                }
                 if (!toInsert.isEmpty()) {
                     Database.SaveResult[] saveResults = Database.insert(toInsert, false);
 
                     for (Integer i = 0; i < saveResults.size(); i++) {
                         if (!saveResults[i].isSuccess()) {
                             for (Database.Error err : saveResults[i].getErrors()) {
-                                if (err.getStatusCode() == StatusCode.DUPLICATE_VALUE) {
-                                    List<PermissionSetAssignment> existingList = [
-                                        SELECT Id, ExpirationDate
-                                        FROM PermissionSetAssignment
-                                        WHERE AssigneeId = :toInsert[i].AssigneeId
-                                          AND PermissionSetId = :toInsert[i].PermissionSetId
-                                        LIMIT 1
-                                    ];
-
-                                    if (!existingList.isEmpty()) {existingList[0].ExpirationDate = toInsert[i].ExpirationDate;update existingList[0];
-                                        toInsert[i] = existingList[0];
-                                    } else {
-                                        System.debug(LoggingLevel.WARN,
-                                            'DUPLICATE_VALUE reported but no existing PSA found. AssigneeId: '
-                                            + toInsert[i].AssigneeId + ', PermissionSetId: ' + toInsert[i].PermissionSetId
-                                        );
-                                    }
-                                } else {
+                                if (err.getStatusCode() != StatusCode.DUPLICATE_VALUE) {
                                     throw new DmlException(err.getMessage());
                                 }
+                                System.debug(LoggingLevel.WARN,
+                                    'DUPLICATE_VALUE on insert for AssigneeId: '
+                                    + toInsert[i].AssigneeId + ', PermissionSetId: ' + toInsert[i].PermissionSetId
+                                );
                             }
                         }
                     }
                 }
 
+                // Collect PSA Ids, request Ids, and access types to pass to a
+                // @future method — needed to avoid MIXED_DML_OPERATION error
+                // (PermissionSetAssignment is a Setup object; Production_Access_Request__c is not)
+                List<Id> requestIds = new List<Id>();
+                List<String> newPsaIds = new List<String>();
+                List<String> accessTypes = new List<String>();
+
                 for (PermissionSetAssignmentWrapper w : wrappers) {
-                    if (w.requestId != null && w.assignment != null && w.assignment.Id != null) {
-                        System.debug('in queable permissionSetAssignmentId: ' + w.assignment.Id);
-                        updateRequestRecordFuture(w.requestId, w.assignment.Id);
+                    if (w.assignment != null && w.assignment.Id != null) {
+                        requestIds.add(w.requestId);        // may be null, handled in future
+                        newPsaIds.add(w.assignment.Id);
+                        accessTypes.add(w.accessType);
                     }
+                }
+
+                if (!newPsaIds.isEmpty()) {
+                    updateRequestsWithNewPsaIdFuture(requestIds, newPsaIds, accessTypes);
                 }
             } catch (Exception e) {
                 System.debug(LoggingLevel.ERROR, 'Queueable error: ' + e.getMessage());
@@ -212,22 +216,52 @@ public without sharing class ProductionAccessPermissionSet {
     }
 
     @future
-    public static void updateRequestRecordFuture(Id requestId, String psaId) {
-        System.debug('code coming to future eith id of parid: '+requestId);
-        System.debug('code coming to future eith id of permissionSetAssignmentId: '+psaId);
-        if (requestId == null) {
-            System.debug('code coming to future eith id of parid: '+requestId);
-            return;
-        }
+    public static void updateRequestsWithNewPsaIdFuture(
+        List<Id> requestIds,
+        List<String> newPsaIds,
+        List<String> accessTypes
+    ) {
         try {
-            Production_Access_Request__c req = new Production_Access_Request__c(
-                Id = requestId,
-                Permission_Set_Assignment_Id__c = psaId,
-                Status__c = 'Active'
-            );
-            update req;
+            Set<Id> handledIds = new Set<Id>();
+            List<Production_Access_Request__c> toUpdate = new List<Production_Access_Request__c>();
+
+            // Update the specific new request records
+            for (Integer i = 0; i < requestIds.size(); i++) {
+                if (requestIds[i] != null && newPsaIds[i] != null) {
+                    System.debug('Future: updating request ' + requestIds[i] + ' with PSA Id ' + newPsaIds[i]);
+                    toUpdate.add(new Production_Access_Request__c(
+                        Id = requestIds[i],
+                        Permission_Set_Assignment_Id__c = newPsaIds[i],
+                        Status__c = 'Active'
+                    ));
+                    handledIds.add(requestIds[i]);
+                }
+            }
+
+            // Also update any OTHER active requests with the same Access_Type__c
+            for (Integer i = 0; i < accessTypes.size(); i++) {
+                if (accessTypes[i] != null && newPsaIds[i] != null) {
+                    String psaId = newPsaIds[i];
+                    String accessType = accessTypes[i];
+                    for (Production_Access_Request__c req : [
+                        SELECT Id
+                        FROM Production_Access_Request__c
+                        WHERE Status__c = 'Active'
+                        AND Access_Type__c = :accessType
+                        AND Id NOT IN :handledIds
+                    ]) {
+                        req.Permission_Set_Assignment_Id__c = psaId;
+                        toUpdate.add(req);
+                        handledIds.add(req.Id);
+                    }
+                }
+            }
+
+            if (!toUpdate.isEmpty()) {
+                update toUpdate;
+            }
         } catch (Exception e) {
-            System.debug(LoggingLevel.ERROR, 'Error updating Production_Access_Request__c: ' + e.getMessage());
+            System.debug(LoggingLevel.ERROR, 'Error updating Production_Access_Request__c with new PSA Id: ' + e.getMessage());
         }
     }
 
@@ -295,6 +329,7 @@ public without sharing class ProductionAccessPermissionSet {
                         SELECT Id
                         FROM PermissionSetAssignment
                         WHERE AssigneeId IN :userIds AND PermissionSetId IN :resolvedPermSetIds
+                        ALL ROWS
                     ]) {
                         targetPsaIds.add(psa.Id);
                     }
@@ -306,6 +341,7 @@ public without sharing class ProductionAccessPermissionSet {
                     SELECT Id
                     FROM PermissionSetAssignment
                     WHERE Id IN :targetPsaIds
+                    ALL ROWS
                 ];
 
                 if (!existingAssignments.isEmpty()) {

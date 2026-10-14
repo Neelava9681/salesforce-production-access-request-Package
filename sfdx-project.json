@@ -2,10 +2,9 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true,
       "package": "Production-Access",
-      "versionName": "1.0.0",
-      "versionNumber": "1.0.0.NEXT"
+      "versionName": "Version 2.0",
+      "versionNumber": "2.0.0.NEXT"
     }
   ],
   "name": "production-access",
@@ -21,6 +20,8 @@
     "Production-Access@1.0.0-6": "04tgL000000W1XFQA0",
     "Production-Access@1.0.0-7": "04tgL000000WfsrQAC",
     "Production-Access@1.0.0-8": "04tgL000000WljlQAC",
-    "Production-Access@1.0.0-9": "04tgL000000WmfpQAC"
+    "Production-Access@1.0.0-9": "04tgL000000WmfpQAC",
+    "Production-Access@2.0.0-1": "04tgL000000ZMYjQAO",
+    "Production-Access@2.0.0-2": "04tgL000000ZMthQAG"
   }
 }

@@ -280,87 +280,6 @@ private class ProductionAccessPermissionSetTest {
     }
 
 
-    // ============================================================
-    // ALREADY ASSIGNED
-    // ============================================================
-
-    @IsTest
-    static void testAssignPermissionSet_AlreadyAssigned() {
-
-        User adminUser = createAdminUser();
-
-        System.runAs(adminUser) {
-
-            PermissionSet ps = getTestPermissionSet();
-
-            User testUser = createTestUser();
-
-            PermissionSetAssignment existingAssignment =
-                new PermissionSetAssignment(
-                    AssigneeId = testUser.Id,
-                    PermissionSetId = ps.Id
-                );
-
-            insert as user existingAssignment;
-
-            List<PermissionSetAssignment> verifyAssignment = [
-                SELECT
-                    Id,
-                    AssigneeId,
-                    PermissionSetId,
-                    ExpirationDate
-                FROM PermissionSetAssignment
-                WHERE AssigneeId = :testUser.Id
-                AND PermissionSetId = :ps.Id
-            ];
-
-            System.assertEquals(
-                1,
-                verifyAssignment.size(),
-                'The Permission Set Assignment should exist.'
-            );
-
-            ProductionAccessPermissionSet.PermissionSetRequest req =
-                new ProductionAccessPermissionSet.PermissionSetRequest();
-
-            req.userId = testUser.Id;
-            req.permissionSetId = String.valueOf(ps.Id);
-
-            List<ProductionAccessPermissionSet.PermissionSetResult> results;
-
-            Test.startTest();
-
-            results =
-                ProductionAccessPermissionSet.assignPermissionSet(
-                    new List<ProductionAccessPermissionSet.PermissionSetRequest>{
-                        req
-                    }
-                );
-
-            Test.stopTest();
-
-            System.assertEquals(
-                1,
-                results.size()
-            );
-
-            System.assertEquals(
-                true,
-                results[0].isSuccess
-            );
-
-            System.assertEquals(
-                true,
-                results[0].isAlreadyAssigned
-            );
-
-            System.assertEquals(
-                'Permission set is already assigned.',
-                results[0].message
-            );
-        }
-    }
-
 
     // ============================================================
     // MISSING USER ID
@@ -766,91 +685,6 @@ private class ProductionAccessPermissionSetTest {
                     WHERE Id = :psa.Id
                 ],
                 'Permission Set Assignment should have been deleted.'
-            );
-        }
-    }
-
-
-    // ============================================================
-    // QUEUEABLE - EXISTING ASSIGNMENT / UPDATE EXPIRATION
-    // ============================================================
-
-    @IsTest
-    static void testQueueable_ExistingAssignment_UpdatesExpiration() {
-
-        User adminUser = createAdminUser();
-
-        System.runAs(adminUser) {
-
-            PermissionSet ps = getTestPermissionSet();
-
-            User testUser = createTestUser();
-
-            PermissionSetAssignment existingPsa =
-                new PermissionSetAssignment(
-                    AssigneeId = testUser.Id,
-                    PermissionSetId = ps.Id,
-                    ExpirationDate = Datetime.now().addHours(1)
-                );
-
-            insert as user existingPsa;
-
-            Datetime newExpiration =
-                Datetime.now().addHours(5);
-
-            PermissionSetAssignment newPsaData =
-                new PermissionSetAssignment(
-                    AssigneeId = testUser.Id,
-                    PermissionSetId = ps.Id,
-                    ExpirationDate = newExpiration
-                );
-
-            ProductionAccessPermissionSet.PermissionSetAssignmentWrapper wrapper =
-                new ProductionAccessPermissionSet.PermissionSetAssignmentWrapper();
-
-            wrapper.assignment = newPsaData;
-            wrapper.requestId = null;
-
-            List<ProductionAccessPermissionSet.PermissionSetAssignmentWrapper>
-                wrappers =
-                    new List<
-                        ProductionAccessPermissionSet.PermissionSetAssignmentWrapper
-                    >();
-
-            wrappers.add(wrapper);
-
-            ProductionAccessPermissionSet.AssignPermissionSetQueueable queueable =
-                new ProductionAccessPermissionSet.AssignPermissionSetQueueable(
-                    wrappers
-                );
-
-            Test.startTest();
-
-            queueable.execute(null);
-
-            Test.stopTest();
-
-            PermissionSetAssignment updatedPsa = [
-                SELECT
-                    Id,
-                    AssigneeId,
-                    PermissionSetId,
-                    ExpirationDate
-                FROM PermissionSetAssignment
-                WHERE Id = :existingPsa.Id
-                LIMIT 1
-            ];
-
-            System.assertEquals(
-                existingPsa.Id,
-                updatedPsa.Id,
-                'Existing PSA should be updated, not replaced.'
-            );
-
-            System.assertEquals(
-                newExpiration,
-                updatedPsa.ExpirationDate,
-                'Existing PSA expiration date should be updated.'
             );
         }
     }
@@ -1315,71 +1149,122 @@ private class ProductionAccessPermissionSetTest {
     }
     
     }
-	@IsTest
-    static void testUpdateRequestRecordFuture_NullRequestId() {
-    
-    User adminUser = createAdminUser();
-    
-    System.runAs(adminUser) {
-    
-        Test.startTest();
-    
-        ProductionAccessPermissionSet.updateRequestRecordFuture(
-            null,
-            null
-        );
-    
-        Test.stopTest();
-    
-        System.assert(
-            true,
-            'Future method should safely handle a null request ID.'
-        );
-    }
-    
-    }
 
 	@IsTest
-    static void testUpdateRequestRecordFuture_HandlesException() {
-    
+static void testAssignPermissionSet_ByPermissionSetName() {
     User adminUser = createAdminUser();
-    
+
     System.runAs(adminUser) {
-    
-        Production_Access_Request__c accessRequest =
+        PermissionSet ps = getTestPermissionSet();
+        User testUser = createTestUser();
+
+        ProductionAccessPermissionSet.PermissionSetRequest req =
+            new ProductionAccessPermissionSet.PermissionSetRequest();
+
+        req.userId = testUser.Id;
+        req.permissionSetId = ps.Name;
+        req.expirationDate = Datetime.now().addHours(2);
+
+        Test.startTest();
+        List<ProductionAccessPermissionSet.PermissionSetResult> results =
+            ProductionAccessPermissionSet.assignPermissionSet(
+                new List<ProductionAccessPermissionSet.PermissionSetRequest>{req}
+            );
+        Test.stopTest();
+
+        System.assertEquals(1, results.size());
+        System.assertEquals(true, results[0].isSuccess);
+
+        System.assertEquals(
+            1,
+            [SELECT COUNT()
+             FROM PermissionSetAssignment
+             WHERE AssigneeId = :testUser.Id
+             AND PermissionSetId = :ps.Id]
+        );
+    }
+}
+
+@IsTest
+static void testFutureUpdatesOtherActiveRequests() {
+    User adminUser = createAdminUser();
+
+    System.runAs(adminUser) {
+        PermissionSet ps = getTestPermissionSet();
+        User testUser = createTestUser();
+
+        Production_Access_Request__c request1 =
             new Production_Access_Request__c(
-                Developer_Name__c = 'Future Exception Test',
-                Developer_Email__c = 'futureexception@example.com',
-                Ticket_Number__c = 'FUTURE-001',
-                Reason__c = 'Future exception test',
+                Developer_Name__c = 'Primary Test',
+                Developer_Email__c = 'primary@example.com',
+                Ticket_Number__c = 'COV-001',
+                Reason__c = 'Coverage test',
                 Access_Type__c = 'System Administrator',
                 Requested_Duration__c = 2,
                 Requested_Start__c = Datetime.now(),
                 Requested_End__c = Datetime.now().addHours(2),
                 Status__c = 'Approved'
             );
-    
-        insert accessRequest;
-    
-        Id deletedRequestId = accessRequest.Id;
-    
-        delete accessRequest;
-    
+
+        Production_Access_Request__c request2 =
+            new Production_Access_Request__c(
+                Developer_Name__c = 'Secondary Test',
+                Developer_Email__c = 'secondary@example.com',
+                Ticket_Number__c = 'COV-002',
+                Reason__c = 'Coverage test',
+                Access_Type__c = 'System Administrator',
+                Requested_Duration__c = 2,
+                Requested_Start__c = Datetime.now(),
+                Requested_End__c = Datetime.now().addHours(2),
+                Status__c = 'Active'
+            );
+
+        insert new List<Production_Access_Request__c>{
+            request1, request2
+        };
+
+        PermissionSetAssignment psa = new PermissionSetAssignment(
+            AssigneeId = testUser.Id,
+            PermissionSetId = ps.Id,
+            ExpirationDate = Datetime.now().addHours(3)
+        );
+
+        ProductionAccessPermissionSet.PermissionSetAssignmentWrapper wrapper =
+            new ProductionAccessPermissionSet.PermissionSetAssignmentWrapper();
+
+        wrapper.assignment = psa;
+        wrapper.requestId = request1.Id;
+        wrapper.accessType = 'System Administrator';
+
         Test.startTest();
-    
-        ProductionAccessPermissionSet.updateRequestRecordFuture(
-            deletedRequestId,
-            '0PS000000000001AAA'
-        );
-    
+
+        new ProductionAccessPermissionSet.AssignPermissionSetQueueable(
+            new List<ProductionAccessPermissionSet.PermissionSetAssignmentWrapper>{
+                wrapper
+            }
+        ).execute(null);
+
         Test.stopTest();
-    
-        System.assert(
-            true,
-            'Future method should catch the exception without failing the test.'
+
+        Map<Id, Production_Access_Request__c> updatedRequests =
+            new Map<Id, Production_Access_Request__c>([
+                SELECT Id, Status__c, Permission_Set_Assignment_Id__c
+                FROM Production_Access_Request__c
+                WHERE Id IN :new Set<Id>{request1.Id, request2.Id}
+            ]);
+
+        System.assertNotEquals(
+            null,
+            updatedRequests.get(request1.Id).Permission_Set_Assignment_Id__c
+        );
+
+        System.assertNotEquals(
+            null,
+            updatedRequests.get(request2.Id).Permission_Set_Assignment_Id__c,
+            'The other active request should receive the new PSA ID.'
         );
     }
-    
-    }
+}
+	
 	
 }
